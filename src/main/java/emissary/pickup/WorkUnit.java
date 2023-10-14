@@ -1,14 +1,10 @@
 package emissary.pickup;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
 /**
  * A WorkUnit is a unit of work a worker will process. The idea is to replace fileNameList. Currently, WorkBundle is set
  * to only have one file, and so there will only be one WorkUnit.
  */
-public final class WorkUnit {
+public class WorkUnit {
     private String fileName;
     private String transactionId;
     // worker updates this boolean
@@ -38,22 +34,6 @@ public final class WorkUnit {
         this.transactionId = transactionId;
         this.failedToParse = failedToParse;
         this.failedToProcess = failedToProcess;
-    }
-
-    public static WorkUnit readFromStream(DataInputStream in) throws IOException {
-        final WorkUnit u = new WorkUnit(null);
-        u.fileName = WorkBundle.readUTFOrNull(in);
-        u.transactionId = WorkBundle.readUTFOrNull(in);
-        u.failedToParse = in.readBoolean();
-        u.failedToProcess = in.readBoolean();
-        return u;
-    }
-
-    public void writeToStream(DataOutputStream out) throws IOException {
-        WorkBundle.writeUTFOrNull(fileName, out);
-        WorkBundle.writeUTFOrNull(transactionId, out);
-        out.writeBoolean(failedToParse);
-        out.writeBoolean(failedToProcess);
     }
 
     /**
